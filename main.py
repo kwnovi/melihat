@@ -1,10 +1,11 @@
- # -*- coding: utf-8 -*-
-
-import lib as _video
-
-url="http://youtu.be/5VtsTW_t9xk"
-
-print _video.get_id(url)
+#  # -*- coding: utf-8 -*-
+from lib import video as v 
+from lib import function  as f 
 
 
+#URL DE LA VIDEO DE DÉPART
+url = "https://www.youtube.com/watch?v=sFrNsSnk8GM"
 
+t = v.video(f.get_id(url),"", url, None , None, None, None)
+
+t.show()
