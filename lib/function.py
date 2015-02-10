@@ -24,9 +24,11 @@ def get_id(value):
 			return query.path.split("/")[2]
 	return None
 
-# DEF IMPORT_JSON
-# DEF BROWSE_SUGGGESTION
-
+def get_url(value):
+	"""
+	Retourne l'url d'une vidéo YouTube à partir de son ID
+	"""
+	return 'www.youtube.com/watch?v='+str(value)
 
 #TEST
 def main():
