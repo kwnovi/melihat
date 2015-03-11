@@ -1,4 +1,4 @@
-#  # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from lib import video as v 
 from lib import function  as f 
 import urllib
@@ -7,45 +7,98 @@ import sys
 import argparse
 import logging
 
-#INITIALISATION
-
+api_key = 'YOUR_API_KEY'
 videosData = []
-relatedVideosID = []
-findAll = False
+videosId = []
+maxDepth=1
+numberOfRelated = 50
 
-#URL DE LA VIDEO DE DÉPART
-url = YOUR_URL
-api_key = YOUR_API_KEY
+# FIND RELATED VIDEOS FROM A SPECIFIC ONE 
+# INPUT : videoID (string)
+# OUPUT : relatedVideo (list of string)
+def getVideoRelated (depth, VideoID):
+	relatedVideosID = []
+	related_video_api ="https://www.googleapis.com/youtube/v3/search?relatedToVideoId="+str(VideoID)+"&type=video&maxResults="+str(numberOfRelated)+"&key="+str(api_key)+"&part=id"
 
-videoID = f.get_id(url)
-api = 'https://www.googleapis.com/youtube/v3/videos?id='+str(videoID)+'&key='+str(api_key)+'&part=snippet,statistics'
+	try:
+		inp = urllib.urlopen(related_video_api)
+		
+		respRelated=json.load(inp)
+		inp.close()
 
-inp = urllib.urlopen(api)
-resp=json.load(inp)
-inp.close()
+		# relatedVideosID : list of related video from a specific one 
+		for x in xrange(0,len(respRelated['items'])):
+			videosId.append([depth,respRelated['items'][x]['id']['videoId']])
 
-# DATA CROWLING
+	except Exception, err:
+		print "error when trying to get the ID of related videos"
 
-videoLevel = 0
-commentCount = resp['items'][0]['statistics']['commentCount']
-viewCount = resp['items'][0]['statistics']['viewCount']
-favoriteCount = resp['items'][0]['statistics']['favoriteCount']
-likeCount = resp['items'][0]['statistics']['likeCount']
-dislikeCount = resp['items'][0]['statistics']['dislikeCount']
-videoName = resp['items'][0]['snippet']['title']
-videoUrl = f.get_url(videoID)
+# SAVE DATA FROM ONE VIDEO
 
-current = v.video(videoLevel,videoID, videoName, videoUrl, viewCount, commentCount, likeCount, dislikeCount)
-videosData.append(current)
+def getVideoData (videoID, videosData, videoDepth):
+	
+	api = 'https://www.googleapis.com/youtube/v3/videos?id='+str(videoID)+'&key='+str(api_key)+'&part=snippet,statistics'
+	
+	try:
+		inp = urllib.urlopen(api)
+		resp=json.load(inp)
+		inp.close()
+
+		videoLevel = videoDepth
+
+		commentCount = resp['items'][0]['statistics']['commentCount']
+		viewCount = resp['items'][0]['statistics']['viewCount']
+		favoriteCount = resp['items'][0]['statistics']['favoriteCount']
+		likeCount = resp['items'][0]['statistics']['likeCount']
+		dislikeCount = resp['items'][0]['statistics']['dislikeCount']
+		videoName = resp['items'][0]['snippet']['title']
+		videoUrl = f.get_url(videoID)
+
+		relatedVideo = getVideoRelated(videoID)
+
+		current = v.video(videoLevel,videoID, videoName, videoUrl, viewCount, commentCount, likeCount, dislikeCount, relatedVideo)
+		videosData.append(current)
+
+		return current
+
+	except Exception, err:
+		print "error when trying to get the data from a specific video"
+
+def getAllID(ID, depth):
+
+	if (depth==maxDepth):
+		return
+
+	depth+=1
+	getVideoRelated(depth,ID)
+
+	BORNINF,BORNSUP = maxDepth*(depth-1), maxDepth*depth 
+
+	for x in xrange(BORNINF,BORNSUP):
+		getAllID(videosId[x][1],depth)
+	
+def main():
+	# url = 'https://www.youtube.com/watch?v=sFrNsSnk8GM'
+	url='https://www.youtube.com/watch?v=2HIuN5lxMCI'
+	initialID = f.get_id(url)
+
+	videosId.append([0,initialID])
+
+	getAllID(videosId[0][1],0)
+
+	print videosId
+	print len(videosId)
 
 
-related_video_api ="https://www.googleapis.com/youtube/v3/search?relatedToVideoId="+str(videoID)+"&type=video&maxResults=50&key="+str(api_key)+"&part=id"
-inp = urllib.urlopen(related_video_api)
-respRelated=json.load(inp)
-inp.close()
+	# print len(videosData[0].relatedVideos)
+	# print videosData[0].relatedVideos[0]
+	# test =  videosData[0].relatedVideos[1]
+	# print 'https://www.googleapis.com/youtube/v3/videos?id='+str(test)+'&key='+str(api_key)+'&part=snippet,statistics'
+	
 
-for x in xrange(0,50):
-	relatedVideosID.append(respRelated['items'][x]['id']['videoId'])
+
+if __name__ == '__main__':
+	main()
 
 
 
