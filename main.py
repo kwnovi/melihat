@@ -7,19 +7,26 @@ import sys
 import argparse
 import logging
 
-api_key = 'YOUR_API_KEY'
+api_key = 'AIzaSyCHeAL8UhXDgvE3YJ45_dkEasCQ3qy16TM'
+YOUTUBE_API_SERVICE_NAME = "youtube"
+YOUTUBE_API_VERSION = "v3"
+
 videosData = []
 videosId = []
-maxDepth=1
-numberOfRelated = 50
+maxDepth=2
+numberOfRelated = 5
 
 # FIND RELATED VIDEOS FROM A SPECIFIC ONE 
 # INPUT : videoID (string)
 # OUPUT : relatedVideo (list of string)
 def getVideoRelated (depth, VideoID):
-	relatedVideosID = []
-	related_video_api ="https://www.googleapis.com/youtube/v3/search?relatedToVideoId="+str(VideoID)+"&type=video&maxResults="+str(numberOfRelated)+"&key="+str(api_key)+"&part=id"
 
+	related_video_api ="https://www.googleapis.com/youtube/v3/search?relatedToVideoId="+str(VideoID)+"&type=video&maxResults="+str(numberOfRelated)+"&key="+str(api_key)+"&part=id"
+	
+	print related_video_api
+
+	if (depth==1):
+		print related_video_api
 	try:
 		inp = urllib.urlopen(related_video_api)
 		
@@ -76,6 +83,8 @@ def getAllID(ID, depth):
 
 	for x in xrange(BORNINF,BORNSUP):
 		getAllID(videosId[x][1],depth)
+
+
 	
 def main():
 	# url = 'https://www.youtube.com/watch?v=sFrNsSnk8GM'
@@ -83,12 +92,10 @@ def main():
 	initialID = f.get_id(url)
 
 	videosId.append([0,initialID])
-
-	getAllID(videosId[0][1],0)
-
+	getAllID(initialID,0)
+	
 	print videosId
 	print len(videosId)
-
 
 	# print len(videosData[0].relatedVideos)
 	# print videosData[0].relatedVideos[0]
