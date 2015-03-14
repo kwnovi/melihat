@@ -7,7 +7,7 @@ import sys
 import argparse
 import logging
 
-api_key = 'AIzaSyCHeAL8UhXDgvE3YJ45_dkEasCQ3qy16TM'
+api_key = 'YOUR_API_KEY'
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
 
