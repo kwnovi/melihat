@@ -8,25 +8,30 @@ import argparse
 import logging
 
 api_key = 'YOUR_API_KEY'
-YOUTUBE_API_SERVICE_NAME = "youtube"
-YOUTUBE_API_VERSION = "v3"
+videosData, videosId = [], []
 
-videosData = []
-videosId = []
+# C'est la profondeur du graphe qui influence sur le temps d'éxecution, mais la profondeur du graphe n'est elle 
+# pas plus importante que le nombre de vidéos récupérée à chaque itération ? 
+#(maxDepth,numberOfRelated) | time 
+
+# (2,5)  | 0.6s 
+# (2,10) | 0.7s
+
+# (3,5)  | 2.9s
+# (3,10) | 2.62s
+
+# (4,5)  | 16.3s
+# (4,10) | 17.02s
+
 maxDepth=2
-numberOfRelated = 5
+numberOfRelated = 4
+maxIdAPI = 50
 
 # FIND RELATED VIDEOS FROM A SPECIFIC ONE 
-# INPUT : videoID (string)
-# OUPUT : relatedVideo (list of string)
 def getVideoRelated (depth, VideoID):
 
 	related_video_api ="https://www.googleapis.com/youtube/v3/search?relatedToVideoId="+str(VideoID)+"&type=video&maxResults="+str(numberOfRelated)+"&key="+str(api_key)+"&part=id"
-	
-	print related_video_api
 
-	if (depth==1):
-		print related_video_api
 	try:
 		inp = urllib.urlopen(related_video_api)
 		
@@ -40,68 +45,86 @@ def getVideoRelated (depth, VideoID):
 	except Exception, err:
 		print "error when trying to get the ID of related videos"
 
-# SAVE DATA FROM ONE VIDEO
-
-def getVideoData (videoID, videosData, videoDepth):
+# SAVE DATA FROM A LIST OF VIDEO ID 
+def getVideoData (finalId):
 	
-	api = 'https://www.googleapis.com/youtube/v3/videos?id='+str(videoID)+'&key='+str(api_key)+'&part=snippet,statistics'
+	# Mettre à la chaine tous les ID et taper une seule fois dans l'URL (limitation à 50)
+	nbList = len(finalId)/maxIdAPI
+	allID =[]
+	i = 0 
+
+	for x in xrange(0, nbList+1):
+		allID.append("")
+		BORNINF, BORNSUP = maxIdAPI*x, maxIdAPI*(x+1)-1
+		for y in range(BORNINF,BORNSUP):
+			if (y<len(finalId)):
+				if (y%maxIdAPI==0):
+					allID[x]+=finalId[y][1]
+				else:
+					allID[x]+=","+finalId[y][1]
 	
-	try:
-		inp = urllib.urlopen(api)
-		resp=json.load(inp)
-		inp.close()
+		api = 'https://www.googleapis.com/youtube/v3/videos?id='+str(allID[x])+'&key='+str(api_key)+'&part=snippet,statistics'
+		
+		# try:
+		# 	inp = urllib.urlopen(api)
+		# 	resp=json.load(inp)
+		# 	inp.close()
 
-		videoLevel = videoDepth
+		# 	for y in xrange(0,maxIdAPI-1):
+				
+		# 		videoLevel = finalId[i][0]
+					
+		# 		commentCount = resp['items'][y]['statistics']['commentCount']
+		# 		viewCount = resp['items'][y]['statistics']['viewCount']
+		# 		favoriteCount = resp['items'][y]['statistics']['favoriteCount']
+		# 		likeCount = resp['items'][y]['statistics']['likeCount']
+		# 		dislikeCount = resp['items'][y]['statistics']['dislikeCount']
+		# 		videoName = resp['items'][y]['snippet']['title']
+		# 		videoUrl = f.get_url(videoID)
 
-		commentCount = resp['items'][0]['statistics']['commentCount']
-		viewCount = resp['items'][0]['statistics']['viewCount']
-		favoriteCount = resp['items'][0]['statistics']['favoriteCount']
-		likeCount = resp['items'][0]['statistics']['likeCount']
-		dislikeCount = resp['items'][0]['statistics']['dislikeCount']
-		videoName = resp['items'][0]['snippet']['title']
-		videoUrl = f.get_url(videoID)
 
-		relatedVideo = getVideoRelated(videoID)
+		# 		current = v.video(videoLevel,videoID, videoName, videoUrl, viewCount, commentCount, likeCount, dislikeCount, relatedVideo)
+		# 		videosData.append(current)
 
-		current = v.video(videoLevel,videoID, videoName, videoUrl, viewCount, commentCount, likeCount, dislikeCount, relatedVideo)
-		videosData.append(current)
-
-		return current
-
-	except Exception, err:
-		print "error when trying to get the data from a specific video"
+		# except Exception, err:
+			# print "error when trying to get the data from the ID list"
 
 def getAllID(ID, depth):
-
+	
 	if (depth==maxDepth):
 		return
 
 	depth+=1
-	getVideoRelated(depth,ID)
+	getVideoRelated(depth,ID)	
 
 	BORNINF,BORNSUP = maxDepth*(depth-1), maxDepth*depth 
 
-	for x in xrange(BORNINF,BORNSUP):
+	for x in xrange(BORNINF, BORNSUP):
 		getAllID(videosId[x][1],depth)
 
+def comp(E1,E2):
+    if E1[0]<E2[0]:
+        return -1
+    if E1[0]>E2[0]:
+        return 1
+    return 0
+ 
 
 	
 def main():
 	# url = 'https://www.youtube.com/watch?v=sFrNsSnk8GM'
 	url='https://www.youtube.com/watch?v=2HIuN5lxMCI'
 	initialID = f.get_id(url)
-
-	videosId.append([0,initialID])
+	
 	getAllID(initialID,0)
+	finalId = [[0,initialID]] + videosId
+	# finalId.sort(comp, reverse=False)
 	
-	print videosId
-	print len(videosId)
+	print finalId
+	print len(finalId)
+	# getVideoData(finalId)
 
-	# print len(videosData[0].relatedVideos)
-	# print videosData[0].relatedVideos[0]
-	# test =  videosData[0].relatedVideos[1]
-	# print 'https://www.googleapis.com/youtube/v3/videos?id='+str(test)+'&key='+str(api_key)+'&part=snippet,statistics'
-	
+
 
 
 if __name__ == '__main__':
