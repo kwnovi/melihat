@@ -10,20 +10,8 @@ import logging
 api_key = 'YOUR_API_KEY'
 videosData, videosId = [], []
 
-
-#(maxDepth,numberOfRelated) | time 
-
-# (2,5)  | 0.6s 
-# (2,10) | 0.7s
-
-# (3,5)  | 2.9s
-# (3,10) | 2.62s
-
-# (4,5)  | 16.3s
-# (4,10) | 17.02s
-
 maxDepth=4
-numberOfRelated = 5
+numberOfRelated = 50
 maxIdAPI = 50
 
 
@@ -35,6 +23,7 @@ def getVideoRelated (depth, VideoID):
 
 	try:
 		inp = urllib.urlopen(related_video_api)
+
 		
 		respRelated=json.load(inp)
 		inp.close()
