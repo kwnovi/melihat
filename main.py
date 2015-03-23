@@ -10,8 +10,8 @@ import logging
 api_key = 'YOUR_API_KEY'
 videosData, videosId = [], []
 
-maxDepth=4
-numberOfRelated = 50
+maxDepth=3
+numberOfRelated = 10
 maxIdAPI = 50
 
 
@@ -45,44 +45,50 @@ def getVideoData (finalId):
 	# Mettre à la chaine tous les ID et taper une seule fois dans l'URL (limitation à 50)
 	nbList = len(finalId)/maxIdAPI
 	allID =[]
+	lenghAllID =[]
+	i = 0
 
 	#creer les videos avec les bons ID avant de remplir les renseignements
 	for x in xrange(0,len(finalId)):
-		current = v.video(finalId[x][0],0, "", "", 0, 0, 0, 0)
+		current = v.video(finalId[x][0],finalId[x][1], "", "", 0, 0, 0, 0)
 		videosData.append(current)
 
 	for x in xrange(0, nbList+1):
 		allID.append("")
-		BORNINF, BORNSUP = maxIdAPI*x, maxIdAPI*(x+1)-1
+		lenghAllID.append("")
+		
+		BORNINF, BORNSUP = maxIdAPI*x, maxIdAPI*(x+1)
 		for y in range(BORNINF,BORNSUP):
 			if (y<len(finalId)):
 				if (y%maxIdAPI==0):
 					allID[x]+=finalId[y][1]
+					lenghAllID[x]=1
 				else:
 					allID[x]+=","+finalId[y][1]
+					lenghAllID[x]+=1
 	
 		api = 'https://www.googleapis.com/youtube/v3/videos?id='+str(allID[x])+'&key='+str(api_key)+'&part=snippet,statistics'
-	
-	# print allID
-	# print len(allID)
-		# try:
-		# 	inp = urllib.urlopen(api)
-		# 	resp=json.load(inp)
-		# 	inp.close()
-
-		# 	for y in xrange(0,maxIdAPI-1):
-					
-		# 		commentCount = resp['items'][y]['statistics']['commentCount']
-		# 		viewCount = resp['items'][y]['statistics']['viewCount']
-		# 		favoriteCount = resp['items'][y]['statistics']['favoriteCount']
-		# 		likeCount = resp['items'][y]['statistics']['likeCount']
-		# 		dislikeCount = resp['items'][y]['statistics']['dislikeCount']
-		# 		videoName = resp['items'][y]['snippet']['title']
-		# 		videoUrl = f.get_url(videoID)
+		# print allID[x]
+		# print  'lenghAllID '+str(x)+' : ' + str(lenghAllID[x])
+		try:
+			inp = urllib.urlopen(api)
+			resp=json.load(inp)
+			inp.close()
 
 
-		# except Exception, err:
-		# 	print "error when trying to get the data from the ID list"
+			for y in xrange(0,lenghAllID[x]): #nombre d'ID dans allID[x]
+				videosData[i].comments = resp['items'][y]['statistics']['commentCount']
+				videosData[i].views = resp['items'][y]['statistics']['viewCount']
+				videosData[i].likes = resp['items'][y]['statistics']['likeCount']
+				videosData[i].dislikes = resp['items'][y]['statistics']['dislikeCount']
+				videosData[i].title = resp['items'][y]['snippet']['title']
+				videosData[i].url = f.get_url(videosData[i].id)
+				# print i
+				i+=1
+
+
+		except Exception, err:
+			print "error when trying to get the data from the ID list"
 
 def getAllID(depth,ID):
 	
@@ -98,7 +104,7 @@ def getAllID(depth,ID):
 	
 def main():
 
-	url='https://www.youtube.com/watch?v=2HIuN5lxMCI'
+	url='https://www.youtube.com/watch?v=CUGzWETn1HQ'
 	initialID = f.get_id(url)
 
 	videosId.append([0,initialID])
@@ -109,7 +115,8 @@ def main():
 
 	getVideoData(videosId)
 
-
+	for x in xrange(0,len(videosData)):
+		videosData[x].show()
 
 
 

@@ -1,28 +1,31 @@
 # -*- coding: utf-8 -*-
 #CLASSE VIDÉO
 
+
 class video:
 	def __init__(self,level,videoID,title, url, views, comments, likes, dislikes):
 		self.level= level
 		self.id = videoID
-		self.title = title
+		self.title = str(title).encode('utf-8')
 		self.url = url
 		self.views = views
 		self.comments = comments
 		self.likes = likes
 		self.dislikes = dislikes
+
 	
 
-	def __str__(self): 
-		 s=( "Level : " + str(self.level) + "\n"+
+	def show(self): 
+		 s=("Level : " + str(self.level) + "\n"+
 		 		"ID : " + str(self.id) + "\n" +
-				 "Title : " + str(self.title) + "\n"+
+				 "Title : " + self.title + "\n"+
 				 "URL : " + str(self.url) + "\n"+
 				 "Views : " + str(self.views) + "\n"+
 				 "Comments : " + str(self.comments) + "\n"+
 				 "Likes : " + str(self.likes) + "\n"+
 				 "Dislikes : " + str(self.dislikes) + "\n")
-		 print s
+
+		 print s.encode('utf-8') 
 
 	
 
