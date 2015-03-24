@@ -13,8 +13,6 @@ class video:
 		self.likes = likes
 		self.dislikes = dislikes
 
-	
-
 	def show(self): 
 		 s=("Level : " + str(self.level) + "\n"+
 		 		"ID : " + str(self.id) + "\n" +
@@ -26,10 +24,6 @@ class video:
 				 "Dislikes : " + str(self.dislikes) + "\n")
 
 		 print s.encode('utf-8') 
-
-	
-
-
 
 #TEST
 def main():

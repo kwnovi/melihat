@@ -7,11 +7,12 @@ import sys
 import argparse
 import logging
 
+
 api_key = 'YOUR_API_KEY'
 videosData, videosId = [], []
 
 maxDepth=3
-numberOfRelated = 10
+numberOfRelated = 3
 maxIdAPI = 50
 
 
@@ -38,7 +39,6 @@ def getVideoRelated (depth, VideoID):
 		print "error when trying to get the ID of related videos"
 
 	return temporaryVideosId
-
 # SAVE DATA FROM A LIST OF VIDEO ID 
 def getVideoData (finalId):
 	
@@ -89,7 +89,7 @@ def getVideoData (finalId):
 
 		except Exception, err:
 			print "error when trying to get the data from the ID list"
-
+# CONSTRUCTION OF THE IDs GRAPH
 def getAllID(depth,ID):
 	
 	if (depth==maxDepth):
@@ -101,23 +101,27 @@ def getAllID(depth,ID):
 		videosId.append([childs[x][0], childs[x][1]])
 		getAllID(childs[x][0]+1, childs[x][1])
 
-	
+def maxLikes (depth): 
+	concernData = []
+
+	for x in xrange(0,len(videosData)):
+		if (videosData[x].level == depth):
+			concernData.append(videosData[x])
+
+	return max(concernData, key = lambda x: x.likes)
+
+			
 def main():
 
-	url='https://www.youtube.com/watch?v=CUGzWETn1HQ'
+	url='https://www.youtube.com/watch?v=M1hYcein2-Y'
 	initialID = f.get_id(url)
 
 	videosId.append([0,initialID])
 	getAllID(1,initialID)
-	
-	print videosId
-	print len(videosId)
 
 	getVideoData(videosId)
 
-	for x in xrange(0,len(videosData)):
-		videosData[x].show()
-
+	maxLikes(2)
 
 
 if __name__ == '__main__':
