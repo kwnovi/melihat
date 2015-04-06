@@ -1,17 +1,15 @@
 # -*- coding: utf-8 -*-
-
-from flask import *
 from urlparse import urlparse
 import urllib
 import  json 
 import csv
+import os
 import time
+from flask import *
 
 app = Flask(__name__)
 
-api_key = 'AIzaSyCHeAL8UhXDgvE3YJ45_dkEasCQ3qy16TM'
-videosData, videosId = [], []
-
+api_key = 'YOUR_API_KEY'
 maxIdAPI = 50
 
 class video:
@@ -77,7 +75,7 @@ def getVideoRelated (depth, VideoID):
 
 	return temporaryVideosId
 
-def getVideoData (finalId):
+def getVideoData (finalId, videosData):
 	
 	# Mettre à la chaine tous les ID et taper une seule fois dans l'URL (limitation à 50)
 	nbList = len(finalId)/maxIdAPI
@@ -126,7 +124,7 @@ def getVideoData (finalId):
 		except Exception, err:
 			print "error when trying to get the data from the ID list"
 
-def getAllID(depth,ID):
+def getAllID(depth,ID, videosId):
 	
 	if (depth==maxDepth):
 		return
@@ -135,22 +133,25 @@ def getAllID(depth,ID):
 
 	for x in range(0,len(childs)):
 		videosId.append([childs[x][0], childs[x][1]])
-		getAllID(childs[x][0]+1, childs[x][1])
+		getAllID(childs[x][0]+1, childs[x][1], videosId)
 
-def mostPopularVideo(): return max(videosData, key=lambda v: int(v.popularite))
+def mostPopularVideo(videosData): return max(videosData, key=lambda v: int(v.popularite))
 
-def mostFrequentVideo(): return max(videosData, key=lambda v: int(v.occurence))
+def mostFrequentVideo(videosData): return max(videosData, key=lambda v: int(v.occurence))
 
-def crawling(url,maxDepth,numberOfRelated):
+def crawling(url,maxDepth,numberOfRelated, videosData, videosId):
 	
+	videosId = []
+	videosData = [] 
+
 	start = time.time()
 
 	initialID = get_id(url)
 
 	videosId.append([0,initialID])
-	getAllID(1,initialID)
+	getAllID(1,initialID, videosId)
 
-	getVideoData(videosId)
+	getVideoData(videosId, videosData)
 
 	populariteInitialVid = (((float(videosData[0].likes)+1)/(float(videosData[0].dislikes)+1))*(float(videosData[0].comments)+1))
 
@@ -163,36 +164,44 @@ def crawling(url,maxDepth,numberOfRelated):
 		for y in xrange(0,len(videosData)):
 			if (videosData[x].title==videosData[y].title or videosData[x].id==videosData[y].id) :
 				videosData[x].occurence +=1
+	
+	if  os.path.exists('static/csv/data.csv'):
+		os.remove('static/csv/data.csv')
 
-
-	with open('data.csv','wb') as csvData:
+	with open('static/csv/data.csv','wb') as csvData:
 		dataWriter = csv.writer(csvData, delimiter=',', quotechar=',', quoting=csv.QUOTE_MINIMAL)
 		dataWriter.writerow(['Depth']+['ID']+['Title']+['Popularity']+['Occurency'])
 		for x in xrange(0,len(videosData)):
 			dataWriter.writerow([videosData[x].level]+[videosData[x].id]+[videosData[x].title.encode("utf-8")]+[videosData[x].popularite]+[videosData[x].occurence])
 
 	timeExecution = round(time.time() - start,1)
-	mostFrequent = mostFrequentVideo()
-	mostPopular = mostFrequentPopular()
-	values = [videosData[0], mostPopular, mostFrequent, len(videosData), timeExecution]
+	mostFrequent = mostFrequentVideo(videosData)
+	mostPopular = mostPopularVideo(videosData)
+	initialVideo = videosData[0]
 
-@app.route('/')
+	return [initialVideo,mostPopular, mostFrequent, len(videosData), timeExecution]
+
+	
+@app.route('/', methods=['POST', 'GET'])
 def main():
 
-	global maxDepth, numberOfRelated
+	global maxDepth
+	global numberOfRelated
+	global url
 
-	url='https://www.youtube.com/watch?v=t5747BhezKM'
-	maxDepth= 2
-	numberOfRelated =2
+	videosId = []
+	videosData = []
 
-	values = crawling(url,maxDepth,numberOfRelated)
+	if request.method=='POST':
 
-	start = True 
+		url = str(request.form['url'])
+		maxDepth = int(request.form['depth'])
+		numberOfRelated = int(request.form['numberOfRelated'])
 
-	if start:
-		return render_template('initial.html')
-	else:
+		values = crawling(url, maxDepth, numberOfRelated, videosId, videosData)
 		return render_template('index.html',var=values)
+
+	return render_template('initial.html')
 
 
 if __name__ == "__main__":

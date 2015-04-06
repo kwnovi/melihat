@@ -7,147 +7,163 @@
     <title>melihat</title>
 
     <link href="css/bootstrap.min.css" rel="stylesheet" />
-    <link href="css/style.min.css" rel="stylesheet" />
+    <link href="css/style2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link href="css/d3.css" rel="stylesheet" />
   </head>
   <body>
-   
+
+
       <nav class="navbar formSpace">
-        <div class="global-container">
-            <div class="service">
+        <div class="container">
+            <form class="form-inline">
+              
+            <div class="service form-group">
               <i class="fa fa-youtube fa-2x"></i>          
             </div>
-
-            <form>
               <div class="form-group">
-                <input type="email" class="form-control" id="mainForm" placeholder="https://www.youtube.com/watch?v=2HIuN5lxMCI"/>
+                <input type="text" class="form-control" id="mainForm"  placeholder="https://www.youtube.com/watch?v=2HIuN5lxMCI" />
+              </div>             
+               <div class="form-group minorForm">
+                      <select class="form-control selectBox" data-toggle="tooltip" data-placement="bottom" title="Number of suggestion recover on each node">
+                          <option>2</option>
+                          <option>3</option>
+                          <option>4</option>
+                          <option>5</option>
+                          <option>6</option>
+                        </select>
               </div>
+              <div class="form-group minorForm">
+                   <select class="form-control selectBox" data-toggle="tooltip" data-placement="bottom" title="Maximum depth of the search">
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+
+                      </select>
+              </div>
+             
+
+
+              <div class="form-group navbar-right">
+                <button class="btn btn-success minorForm generate" type="submit"> Generate</button>
+              </div> 
            </form>
         </div>
     </nav>
 
-    
-    <nav class="checkSpace">
-      <div class="global-container checkheight">
-          <div class="checkbox">
-
-                    <label>
-                      <input type="checkbox"> View count
-                    </label>
-                
-                    <label class="checkbox-placement">
-                      <input type="checkbox"> Comment count
-                    </label>
-                
-                    <label class= "checkbox-placement">
-                      <input type="checkbox"> Like count
-                    </label>
-                
-                    <label class="checkbox-placement">
-                      <input type="checkbox"> Dislike count
-                    </label>                  
-                
-        </div>
+    <!-- 
+      <div class="erreur">
+      <div class="container">
+        <p>Something seems wrong with your parameters!</p>
       </div>
-    </nav>
+    </div>
+     -->
 
-    <div class="global-container">
-      <div class="d3">
-        <img src="./visu.png" alt="#">
-      </div>
-
-              <div class="checkbox-v">
-
-                    <label>
-                      <input type="checkbox"> View count
-                    </label>
-                
-                    <label >
-                      <input type="checkbox"> Comment count
-                    </label>
-                
-                    <label>
-                      <input type="checkbox"> Like count
-                    </label>
         
-                    <label >
-                      <input type="checkbox"> Dislike count
-                    </label>                  
-                
-              </div>
-    
-    <div class="best-result">
-      <p>
-        <span class="FA"><i class="fa fa-trophy"></i></span>  Best suggestion : 
-        <a href="#">Bohren & Der Club Of Gore - Sunset Mission</a>
-      </p>   
+<!--     <div class="container">
+      <h3>No visualization yet</h3>
+    </div> 
+    -->
 
-      <ul>
-          <li><i class="fa fa-eye"></i> 376 543 views</li>
-          <li><i class="fa fa-comments-o"></i> 432 comments</li>
-          <li><i class="fa fa-thumbs-o-up"></i> 23 454 likes</li>   
-          <li><i class="fa fa-thumbs-o-down"></i> 2 634 likes</li>
-      </ul>
-    </div>
-
-  
-  <div class="video-stat" role="tabpanel">
-
-  <!-- Nav tabs -->
-  <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-film"></i> &nbsp; Video</a></li>
-    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-line-chart"></i> &nbsp; Statistics</a></li>
-
-  </ul>
-
-  <!-- Tab panes -->
-  <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="home">
+    <div class="container global">
+      <p class='lead title'> General Elektriks - Little Lady <a href="#"><i class="fa fa-external-link"></i></a></p>
+              <ul class="initial-video">
+                <li><i class="fa fa-eye"></i>  &nbsp; 376 543 views</li>
+                <li><i class="fa fa-comments-o"></i>  &nbsp; 432 comments</li>
+                <li><i class="fa fa-thumbs-o-up"></i>  &nbsp; 23 454 likes</li>   
+                <li><i class="fa fa-thumbs-o-down"></i>  &nbsp; 2 634 likes</li>
+            </ul>
+     
       <div class="row">
-        <div class="col-md-7">
-          <ul>
-            <li> Name : Bohren & Der Club Of Gore - Sunset Mission</li>
-            <li>Level : 5</li>
-            <li>Inter-level redundancy : 0,8938</li>
-          </ul>
+        <div id="example0" class="col-md-7 graph parcoords" style="min-height:300px;">
         </div>
-        <div class="col-md-5">
-          <ul>
-            <li>Basic crieterion : Views count</li>
-            <li>Intersection : Yes (Likes views)</li>
-            <li>Intra-level redundancy : 0,0003</li>
-          </ul>
+        <div class="col-md-5 results">
+          
+
+            <div class="best-result first-block">
+            <p>
+              <span class="FA"><i class="fa fa-trophy"></i></span> &nbsp;  Most popular video <small><b>(230545)</b></small></p>
+             <p> 
+              <a href="#">Bohren & Der Club Of Gore - Sunset Mission</a>
+            </p>   
+
+            <ul>
+                <li><i class="fa fa-eye"></i> 376 543 views</li>
+                <li><i class="fa fa-comments-o"></i> 432 comments</li>
+                <li><i class="fa fa-thumbs-o-up"></i> 23 454 likes</li>   
+                <li><i class="fa fa-thumbs-o-down"></i> 2 634 likes</li>
+            </ul>
+          </div>
+
+
+            <div class="best-result">
+            <p>
+              <span class="FA"><i class="fa fa-trophy"></i></span> &nbsp;   Most frequent video <small><b>(230545)</b></small></p>
+             <p>
+              <a href="#">Bohren & Der Club Of Gore - Sunset Mission</a>
+            </p>   
+
+            <ul>
+                <li><i class="fa fa-eye"></i> 376 543 views</li>
+                <li><i class="fa fa-comments-o"></i> 432 comments</li>
+                <li><i class="fa fa-thumbs-o-up"></i> 23 454 likes</li>   
+                <li><i class="fa fa-thumbs-o-down"></i> 2 634 likes</li>
+            </ul>
+          </div>
+
+          <p><small><b>113 424 videos found in 54.4 s</b> <br/> Use your cursor to reorder the axis or to select a specific range</small></p>
+
+
+
         </div>
       </div>
 
-
     </div>
-    <div role="tabpanel" class="tab-pane" id="profile">
-      <div class="row">
-        <div class="col-md-6">
-          <ul>
-            <li> 12 345 642 videos found</li>
-            <li>2 videos satisfiyng at least 2 crietera</li>
-            
-          </ul>
-        </div>
-        <div class="col-md-6">
-          <ul>
-            <li>16 videos selected</li>
 
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
+
 
 
 
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/d3.v3.min.js" charset="utf-8"></script>
+    <script src="js/d3.min.js"></script>
+    <script src="js/d3.parcoords.js"></script>
+    <script>
+                //interact with this variable from a javascript console
+        var pc0;
+
+        var blue_to_brown = d3.scale.linear()
+          .domain([0, 5])
+          .range(["red", "#3498db"])
+          .interpolate(d3.interpolateLab);
+
+
+        d3.csv('data.csv', function(data) {
+        pc0 = d3.parcoords()("#example0")
+          .data(data)
+            .showControlPoints(false)
+            .hideAxis(["Title"])
+            .hideAxis(["ID"])
+            .composite("darker")
+            .width(860)
+            .color(function(d) { return blue_to_brown(d['Depth']);})
+            .render()
+            .alpha(0.35)
+            .brushMode("1D-axes")
+            .reorderable()
+            .interactive();
+        });
+
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        });
+
+    </script>
   </body>
 </html>

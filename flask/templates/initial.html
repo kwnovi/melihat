@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>melihat</title>
+
+    <link href="static/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="static/css/style2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link href="static/css/d3.css" rel="stylesheet" />
+  </head>
+  <body>
+
+
+
+      <nav class="navbar formSpace">
+        <div class="container">
+            <form class="form-inline" action="" method="POST">
+              
+            <div class="service form-group">
+              <i class="fa fa-youtube fa-2x"></i>          
+            </div>
+              <div class="form-group">
+                <input type="text" class="form-control" id="mainForm"  placeholder="https://www.youtube.com/watch?v=2HIuN5lxMCI" name="url" />
+              </div>             
+               <div class="form-group minorForm">
+                <input  name='numberOfRelated' type="text" class="form-control"  placeholder="Number of suggestion" />
+              </div>
+              <div class="form-group minorForm">
+                <input  name='depth' type="text" class="form-control"   placeholder="depth" />
+              </div>
+             
+
+
+              <div class="form-group navbar-right">
+                <button class="btn btn-success minorForm generate" type="submit"> Generate</button>
+              </div> 
+           </form>
+        </div>
+    </nav>
+
+      <div class="container">
+            <h3>No visualization  yet</h3>
+      </div> 
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
+    <script src="static/js/d3.min.js"></script>
+    <script src="static/js/d3.parcoords.js"></script>
+    <script>
+                //interact with this variable from a javascript console
+        var pc0;
+
+        var blue_to_brown = d3.scale.linear()
+          .domain([0, 5])
+          .range(["red", "#3498db"])
+          .interpolate(d3.interpolateLab);
+
+
+        d3.csv('static/data.csv', function(data) {
+        pc0 = d3.parcoords()("#example0")
+          .data(data)
+            .showControlPoints(false)
+            .hideAxis(["Title"])
+            .hideAxis(["ID"])
+            .composite("darker")
+            .width(860)
+            .color(function(d) { return blue_to_brown(d['Depth']);})
+            .render()
+            .alpha(0.35)
+            .brushMode("1D-axes")
+            .reorderable()
+            .interactive();
+        });
+
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        });
+
+    </script>
+
+
+  </body>
+</html>

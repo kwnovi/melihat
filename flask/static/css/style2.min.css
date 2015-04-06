@@ -1,0 +1,153 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700,900);
+
+::-webkit-input-placeholder { color:black; }
+::-moz-placeholder { color:black; } 
+
+body {
+	background-color: #fbfbfb !important;
+
+}
+#mainForm {
+	border-radius: 0px !important;
+	/*text-align: center;*/
+	/*background-color: #e0e0e0;*/
+	/*height: 40px !important;
+	border: 0px solid white;*/
+	min-width:450px;
+	margin-top: 9px;
+	margin-left: 5px;
+
+}
+.generate {
+	background-color: #64B5F6 !important;
+	color:#fbfbfb;
+	border: 1px solid #64B5F6 !important;
+}
+.closeButton {
+	border-radius: 0px !important;
+}
+.criteria label  {
+margin-left: 20px;
+}
+.minorForm {
+	border-radius: 0px !important;
+	margin-top: 9px;
+	margin-left: 15px;
+}
+.selectBox {
+	border-radius: 0px !important;
+	-webkit-appearance: none;
+	text-align: center;
+}
+
+.select {
+	border-radius: 0px !important;
+	margin-top: 9px;
+}
+.formSpace {
+	background-color: white !important;
+	border-bottom:  none !important;
+	min-height: 60px;
+	border-bottom: 3px solid #e0e0e0 !important;
+}
+.erreur p {
+	padding: 10px 0 0 15px ;
+	color:white;
+}
+.erreur {
+	background-color: #ef5305;
+	min-height: 40px;
+	margin-top: -20px;
+	overflow: 
+}
+
+.service {
+	display: block; 
+	margin-top: 5px;
+	height: 40px;
+	background-color: #fff;
+	width:50px;
+	padding : 5px 0 0 12px;
+	float: left;
+}
+
+h3 {
+	 font-family: 'Lato', sans-serif;
+	font-weight: 300;
+	font-size: 40px;
+	text-align: center;
+	margin-top: 200px;
+	color:#95a5a6;
+}
+
+.global {
+	margin-top: 50px;
+	padding-left: 25px;
+	font-size:13px;
+}
+.first-block {
+
+}
+.best-result {
+	background-color: #eceff1;
+	min-height: 100px;
+	padding: 14px 0 0 20px;
+}
+
+.best-result a {
+	padding-left: 10px;
+	color:#3498db;
+}
+.best-result a:hover {
+	border-bottom: 0px;
+	text-decoration: none;
+	color:#5b97c6;
+}
+
+.best-result ul  {
+	list-style-type: none;
+		margin-left: -40px;
+}
+.best-result li {
+	display: inline-block;
+	padding-left: 10px;
+}
+.title {
+	margin-top: -30px;
+	float: left;
+}
+.title a {
+	font-size: 13px;
+	margin-left: 10px
+}
+.results {
+	margin-left : 110px;
+}
+.initial-video{
+	list-style-type: none;
+	float : right;
+	display:block;
+	margin-top: -22px;
+	margin-bottom: 50px;
+	font-family: 'Lato', sans-serif;
+}
+.initial-video  li {
+	display: inline-block;
+	padding-left: 15px;
+}
+
+.graph {
+	margin-left : -110px;
+}
+
+.video-stat {
+	margin: 30px 0 30px 0;
+}
+.video-stat ul {
+	margin-top: 25px;
+}
+.video-stat li {margin-top: 2px;}
+
+.nav-tabs>li.active>a {
+	background-color: #fbfbfb !important
+}

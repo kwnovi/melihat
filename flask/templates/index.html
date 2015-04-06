@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>melihat</title>
+
+    <link href="static/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="static/css/style2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link href="static/css/d3.css" rel="stylesheet" />
+  </head>
+  <body>
+
+
+      <nav class="navbar formSpace">
+        <div class="container">
+            <form class="form-inline" action="" method="POST">
+              
+            <div class="service form-group">
+              <i class="fa fa-youtube fa-2x"></i>          
+            </div>
+              <div class="form-group">
+                <input type="text" class="form-control" id="mainForm"  placeholder="https://www.youtube.com/watch?v=2HIuN5lxMCI" name="url" />
+              </div>             
+               <div class="form-group minorForm">
+                <input  name='numberOfRelated' type="text" class="form-control"  placeholder="Number of suggestion" />
+              </div>
+              <div class="form-group minorForm">
+                <input  name='depth' type="text" class="form-control"   placeholder="depth" />
+              </div>
+             
+
+
+              <div class="form-group navbar-right">
+                <button class="btn btn-success minorForm generate" type="submit"> Generate</button>
+              </div> 
+           </form>
+        </div>
+    </nav>
+
+    <!-- 
+      <div class="erreur">
+      <div class="container">
+        <p>Something seems wrong with your parameters!</p>
+      </div>
+    </div>
+     -->
+
+    <div class="container global">
+      <p class='lead title'> {{ var[0].title }} <a href="{{ var[0].url }}" ><i class="fa fa-external-link"></i></a></p>
+              <ul class="initial-video">
+                <li><i class="fa fa-eye"></i>  &nbsp;
+                  {% if var[0].views > 1 %}
+                  {{ var[0].views }} views
+                  {% else %}
+                  {{ var[0].views }} view
+                  {% endif%} 
+                </li>
+                <li><i class="fa fa-comments-o"></i>  &nbsp;
+                  {% if var[0].comments > 1 %}
+                  {{ var[0].comments }} comments
+                  {% else %}
+                  {{ var[0].comments }} comment
+                  {% endif%} 
+               </li>
+                <li><i class="fa fa-thumbs-o-up"></i>  &nbsp;
+                 {% if var[0].likes > 1 %}
+                  {{ var[0].likes }} likes
+                  {% else %}
+                  {{ var[0].likes }} like
+                  {% endif%} 
+               </li>   
+                <li><i class="fa fa-thumbs-o-down"></i>  &nbsp; 
+                  {% if var[0].dislikes >1 %}
+                  {{ var[0].dislikes }} dislikes
+                  {% else %}
+                  {{ var[0].dislikes }} dislike
+                  {% endif%} 
+                </li>
+            </ul>
+     
+      <div class="row">
+        <div id="example0" class="col-md-7 graph parcoords" style="min-height:300px;">
+        </div>
+        <div class="col-md-5 results">
+          
+
+            <div class="best-result first-block">
+            <p>
+              <span class="FA"><i class="fa fa-trophy"></i></span> &nbsp;  Most popular video <small><b>({{ var[1].popularite }})</b></small></p>
+             <p> 
+              <a href="{{ var[1].url }}" target="_blank">{{ var[1].title }}</a>
+            </p>   
+
+            <ul>
+                <li><i class="fa fa-eye"></i>  
+                  {% if var[1].views > 1 %}
+                  {{ var[1].views }} views
+                  {% else %}
+                  {{ var[1].views }} view
+                  {% endif%} 
+                </li>
+                <li><i class="fa fa-comments-o"></i>  
+                  {% if var[1].comments > 1 %}
+                  {{ var[1].comments }} comments
+                  {% else %}
+                  {{ var[1].comments }} comment
+                  {% endif%} 
+               </li>
+                <li><i class="fa fa-thumbs-o-up"></i>  
+                 {% if var[1].likes > 1 %}
+                  {{ var[1].likes }} likes
+                  {% else %}
+                  {{ var[1].likes }} like
+                  {% endif%} 
+               </li>   
+                <li><i class="fa fa-thumbs-o-down"></i>   
+                  {% if var[1].dislikes >1 %}
+                  {{ var[1].dislikes }} dislikes
+                  {% else %}
+                  {{ var[1].dislikes }} dislike
+                  {% endif%} 
+                </li>
+            </ul>
+          </div>
+
+
+            <div class="best-result">
+            <p>
+              <span class="FA"><i class="fa fa-trophy"></i></span> &nbsp;   Most frequent video <small><b>({{ var[2].occurence }})</b></small></p>
+             <p>
+              <a href="{{ var[2].url }}" target="_blank">{{ var[2].title }}</a>
+            </p>   
+
+            <ul>
+                <li><i class="fa fa-eye"></i>  
+                  {% if var[2].views > 1 %}
+                  {{ var[2].views }} views
+                  {% else %}
+                  {{ var[2].views }} view
+                  {% endif%} 
+                </li>
+                <li><i class="fa fa-comments-o"></i>  
+                  {% if var[2].comments > 1 %}
+                  {{ var[2].comments }} comments
+                  {% else %}
+                  {{ var[2].comments }} comment
+                  {% endif%} 
+               </li>
+                <li><i class="fa fa-thumbs-o-up"></i>  
+                 {% if var[2].likes > 1 %}
+                  {{ var[2].likes }} likes
+                  {% else %}
+                  {{ var[2].likes }} like
+                  {% endif%} 
+               </li>   
+                <li><i class="fa fa-thumbs-o-down"></i>   
+                  {% if var[2].dislikes >1 %}
+                  {{ var[2].dislikes }} dislikes
+                  {% else %}
+                  {{ var[2].dislikes }} dislike
+                  {% endif%} 
+                </li>
+            </ul>
+          </div>
+
+          <p><small><b>{{ var[3] }} videos found in {{ var[4] }}s</b> <br/> 
+            {% if var[4] > 120 %}
+            <span style='color:#e74c3c;'><b>It was especially slow but we made it!</b></span><br/>
+            {% endif%} 
+            <b></b>
+            Use your cursor to reorder the axis or to select a specific range</small></p>
+        </div>
+      </div>
+    </div>
+
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
+    <script src="static/js/d3.min.js"></script>
+    <script src="static/js/d3.parcoords.js"></script>
+    <script>
+
+      var pc0;
+
+        var red_to_blue = d3.scale.linear()
+          .domain([0, 5])
+          .range(["red", "#3498db"])
+          .interpolate(d3.interpolateLab);
+
+      var test = 'static/csv/data.csv?_=' + Math.random();
+
+     d3.csv('static/csv/data.csv?_=' + Math.random(), function(data) {
+      pc0 = d3.parcoords()("#example0")
+          .data(data)
+            .showControlPoints(false)
+            .hideAxis(["Title"])
+            .hideAxis(["ID"])
+            .composite("darker")
+            .width(860)
+            .color(function(d) { return red_to_blue(d['Depth']);})
+            .render()
+            .alpha(0.35)
+            .brushMode("1D-axes")
+            .reorderable()
+            .interactive();
+        });
+
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        });
+
+
+    </script>
+
+  </body>
+</html>
