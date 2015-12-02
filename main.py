@@ -9,7 +9,7 @@ import time
 
 app = Flask(__name__)
 
-api_key = 'AIzaSyCHeAL8UhXDgvE3YJ45_dkEasCQ3qy16TM'
+api_key = 'YOUR API KEY'
 videosData, videosId = [], []
 
 maxIdAPI = 50
